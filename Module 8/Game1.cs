@@ -111,6 +111,7 @@ namespace Module_8
             _textures[3] = Content.Load<Texture2D>("char1attack");
             _font = Content.Load<SpriteFont>("SpriteFont"); // Replace the font anytime
 
+            //asdddddddddd
 
             _textures2 = new Texture2D[2]; // For char 2
             _textureWalkingRight = Content.Load<Texture2D>("char2right");
