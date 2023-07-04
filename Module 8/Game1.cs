@@ -45,6 +45,7 @@ namespace Module_8
         Button[] button;
         SpriteFont menuFont;
         Texture2D bgMenu;
+        Texture2D bg2;
 
 
         private enum GameState
@@ -86,10 +87,10 @@ namespace Module_8
             Rectangle butRect1 = new Rectangle(300, 200, 350, 75);
             button[0] = new Button(butTex, butRect1, butColor);
 
-            Rectangle butRect2 = new Rectangle(300, 275, 350, 75);
+            Rectangle butRect2 = new Rectangle(300, 293, 350, 75);
             button[1] = new Button(butTex, butRect2, butColor);
 
-            Rectangle butRect3 = new Rectangle(300, 350, 350, 75);
+            Rectangle butRect3 = new Rectangle(300, 385, 350, 75);
             button[2] = new Button(butTex, butRect3, butColor);
 
 
@@ -101,6 +102,7 @@ namespace Module_8
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             buttonFont = Content.Load<SpriteFont>("ButtonFont");
             bgMenu = Content.Load<Texture2D>("bgMenu");
+            bg2 = Content.Load<Texture2D>("bg2");
             menuFont = Content.Load<SpriteFont>("GameFont");
             _textures = new Texture2D[4];
             _textures[0] = Content.Load<Texture2D>("char1idle");
@@ -128,7 +130,7 @@ namespace Module_8
             frameHeight3 = 100; // Height of each frame
 
 
-            _position = new Vector2(100, 200);
+            _position = new Vector2(100, 360);
             currentFrame = 0;
             totalFrames = 8;
             frameWidth = _textures[0].Width / totalFrames;
@@ -143,9 +145,6 @@ namespace Module_8
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
             var keyboardState = Keyboard.GetState();
             var movementSpeed = (keyboardState.IsKeyDown(Keys.LeftShift) || keyboardState.IsKeyDown(Keys.RightShift)) ? 5 : 3;
 
@@ -293,9 +292,9 @@ namespace Module_8
                 jumpVelocity += Gravity;
                 _position.Y += jumpVelocity;
 
-                if (_position.Y >= 200)
+                if (_position.Y >= 360)
                 {
-                    _position.Y = 200;
+                    _position.Y = 360;
                     jumpVelocity = 0f;
                     isJumping = false;
                 }
@@ -372,11 +371,8 @@ namespace Module_8
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(bgMenu, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+            //_spriteBatch.Draw(bgMenu, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
-            //title
-            _spriteBatch.DrawString(menuFont, "Beach,       !", new Vector2(275, 90), Color.MediumAquamarine);
-            _spriteBatch.DrawString(menuFont, "Run", new Vector2(535, 90), Color.Coral);
             if (_gameState == GameState.Playing)
             {
                 DrawGame();
@@ -401,6 +397,9 @@ namespace Module_8
 
         private void DrawGame()
         {
+            //background
+            _spriteBatch.Draw(bg2, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+
             if (characterSelection == 1)
             {
                 if (isWalking)
@@ -497,6 +496,19 @@ namespace Module_8
             var buttonY = menuTitlePosition.Y + menuTitleSize.Y + _font.LineSpacing * 2;
             var buttonStartX = menuTitlePosition.X;
 
+            //background
+            _spriteBatch.Draw(bgMenu, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+
+            //title
+            _spriteBatch.DrawString(menuFont, "Beach,       !", new Vector2(275, 90), Color.MediumAquamarine);
+            _spriteBatch.DrawString(menuFont, "Run", new Vector2(535, 90), Color.Coral);
+
+            //buttons
+            for (int i = 0; i < button.Length; i++)
+            {
+                _spriteBatch.Draw(button[i].ButTex, button[i].ButRect, button[i].ButColor);
+            }
+
             _spriteBatch.DrawString(buttonFont, "New Game", new Vector2(400, 218), currentOption == 0 ? Color.Yellow : Color.White);
             _spriteBatch.DrawString(buttonFont, "Load Game", new Vector2(395, 293 + _font.LineSpacing), currentOption == 1 ? Color.Yellow : Color.White);
             _spriteBatch.DrawString(buttonFont, "Exit", new Vector2(450, 368 + _font.LineSpacing * 2), currentOption == 2 ? Color.Yellow : Color.White);
@@ -510,6 +522,8 @@ namespace Module_8
             var aboutTextSize = _font.MeasureString(aboutText);
             var aboutTextPosition = new Vector2((screenWidth - aboutTextSize.X) / 2, (screenHeight - aboutTextSize.Y) / 2);
 
+            //background
+            _spriteBatch.Draw(bgMenu, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
             _spriteBatch.DrawString(_font, aboutText, aboutTextPosition, Color.White);
         }
 
@@ -518,9 +532,12 @@ namespace Module_8
             var screenWidth = _graphics.PreferredBackBufferWidth;
             var screenHeight = _graphics.PreferredBackBufferHeight;
             var menuTitleSize = _font.MeasureString("Character Selection");
-            var menuTitlePosition = new Vector2((screenWidth - menuTitleSize.X) / 2, 50);
+            var menuTitlePosition = new Vector2(135, 50);
 
-            _spriteBatch.DrawString(_font, "Character Selection", menuTitlePosition, Color.White);
+            //background
+            _spriteBatch.Draw(bgMenu, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+
+            _spriteBatch.DrawString(menuFont, "Character Selection", menuTitlePosition, Color.Coral);
 
             var characterNameSize = _font.MeasureString(characterNames[characterSelection]);
             var characterNamePosition = new Vector2((screenWidth - characterNameSize.X) / 2, (screenHeight - characterNameSize.Y) / 2);
