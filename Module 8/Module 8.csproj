@@ -12,6 +12,54 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\bg2.png" />
+    <None Remove="Content\bgMenu.png" />
+    <None Remove="Content\ButtonFont.spritefont" />
+    <None Remove="Content\char1attack.png" />
+    <None Remove="Content\char1idle.png" />
+    <None Remove="Content\char1left.png" />
+    <None Remove="Content\char1right.png" />
+    <None Remove="Content\char2attack.png" />
+    <None Remove="Content\char2idle.png" />
+    <None Remove="Content\char2left.png" />
+    <None Remove="Content\char2right.png" />
+    <None Remove="Content\char3idle.png" />
+    <None Remove="Content\char3left.png" />
+    <None Remove="Content\char3right.png" />
+    <None Remove="Content\c\background.png" />
+    <None Remove="Content\c\Content.mgcb" />
+    <None Remove="Content\c\Continue.png" />
+    <None Remove="Content\c\deadslime.png" />
+    <None Remove="Content\c\floor.png" />
+    <None Remove="Content\c\gameover.png" />
+    <None Remove="Content\c\healthbar.png" />
+    <None Remove="Content\c\healthborder.png" />
+    <None Remove="Content\c\knockback.png" />
+    <None Remove="Content\c\LeftRun.png" />
+    <None Remove="Content\c\LeftSlash.png" />
+    <None Remove="Content\c\Level1.png" />
+    <None Remove="Content\c\Level2.png" />
+    <None Remove="Content\c\MainBG.png" />
+    <None Remove="Content\c\Menu.png" />
+    <None Remove="Content\c\menutext.png" />
+    <None Remove="Content\c\potion.png" />
+    <None Remove="Content\c\Quit.png" />
+    <None Remove="Content\c\RightRun.png" />
+    <None Remove="Content\c\RightSlash.png" />
+    <None Remove="Content\c\rim.png" />
+    <None Remove="Content\c\rimuru.png" />
+    <None Remove="Content\c\stage2.png" />
+    <None Remove="Content\c\Start.png" />
+    <None Remove="Content\c\teleporter.png" />
+    <None Remove="Content\c\Tile1.png" />
+    <None Remove="Content\c\Tile2.png" />
+    <None Remove="Content\c\Tile3.png" />
+    <None Remove="Content\c\youwin.png" />
+    <None Remove="Content\GameFont.spritefont" />
+    <None Remove="Content\menuButton.png" />
+    <None Remove="Content\SpriteFont.spritefont" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.1.303" />
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
   </ItemGroup>
