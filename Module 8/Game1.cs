@@ -371,7 +371,6 @@ namespace Module_8
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
-            //_spriteBatch.Draw(bgMenu, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
             if (_gameState == GameState.Playing)
             {
@@ -399,6 +398,9 @@ namespace Module_8
         {
             //background
             _spriteBatch.Draw(bg2, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+
+            //stage name
+            _spriteBatch.DrawString(buttonFont, "Stage 1", new Vector2(10, 10), Color.Sienna);
 
             if (characterSelection == 1)
             {
