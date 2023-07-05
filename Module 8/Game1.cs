@@ -510,7 +510,11 @@ namespace Module_8
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
+
             switch (MainGameState)
+
+
+
             {
                 case GameState.MainMenu:
                     _spriteBatch.Draw(Content.Load<Texture2D>("MainBG"),
@@ -523,6 +527,8 @@ namespace Module_8
 
                 case GameState.Level1:
                     _spriteBatch.Draw(stage1, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
+                    //stage name
+                    _spriteBatch.DrawString(buttonFont, "Stage 1", new Vector2(10, 10), Color.Sienna);
                     _spriteBatch.Draw(pText, pDisplay, pSource, pColor);
                     //enemy1
                     _spriteBatch.Draw(eText, eDisplay, eSource, eColor);
@@ -557,6 +563,8 @@ namespace Module_8
 
                 case GameState.Level2:
                     _spriteBatch.Draw(stage2, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
+                    //stage name
+                    _spriteBatch.DrawString(buttonFont, "Stage 1", new Vector2(10, 10), Color.Sienna);
                     _spriteBatch.Draw(pText, pDisplay, pSource, pColor);
                     //enemy3
                     _spriteBatch.Draw(e3Text, e3Display, e3Source, e3Color);
@@ -598,7 +606,10 @@ namespace Module_8
 
         public void PlayAnimation(int reset)
         {
+
             if (delay > 15)
+
+
             {
                 if (reset != changeAnim)
                 {
