@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Module_8;
 
 namespace Module_8
 {
@@ -15,29 +16,30 @@ namespace Module_8
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D stage1, stage2;
+        private Texture2D stage1, stage2, stage3;
         private int Speed = 5, Gravity = 1, SpeedY = 15;
         private bool Jump = false;
 
         Texture2D pText, tiles, eText, e2Text, e3Text, e4Text, hpText,
-            e5Text, h1Text, h2Text, hbText, MainMtext, pausedText, gotext, winText,
+            e5Text, e6Text, h1Text, h2Text, hbText, MainMtext, pausedText, gotext, winText,
             tpText, tp2Text;
 
         Rectangle pSource, pDisplay, eSource, eDisplay, e2Source, hpDis,
             e2Display, e3Display, e3Source, e4Display, e4Source, e5Display,
             e5Source, h1Display, h2Display, hbDisplay, MainMDis, pausedDis, goDis,
-            winDis, tpDis, tp2Dis;
+            winDis, tpDis, tp2Dis, e6Source, e6Display;
 
         Color pColor,
             eColor,
             e2Color,
             e3Color,
             e4Color,
-            e5Color;
+            e5Color,
+            e6Color;
 
         int delay, changeAnim, red = 0, green = 0, blue = 0;
 
-        cButton btnPlay, btnQuit, btnContinue, btnExit1, btnExit2, btnExit3, btnExit4, btnL1, btnL2;
+        cButton btnPlay, btnQuit, btnContinue, btnExit1, btnExit2, btnExit3, btnExit4, btnL1, btnL2, btnL3;
 
         bool paused = false;
         bool gameover1 = false;
@@ -46,7 +48,7 @@ namespace Module_8
         enum GameState
         {
             MainMenu, Choose,
-            Level1, Level2, Playing,
+            Level1, Level2, Level3, Playing,
         }
         GameState MainGameState = GameState.MainMenu;
         GameState ChooseGameState = GameState.Choose;
@@ -105,6 +107,13 @@ namespace Module_8
             e5Display = new Rectangle(50, 465, 80, 80);
             e5Color = Color.White;
 
+            //enemy6
+            e6Text = Content.Load<Texture2D>("rimuru");
+            e6Source = new Rectangle(0, 0, eText.Width, eText.Height);
+            e6Display = new Rectangle(50, 465, 80, 80);
+            e6Color = Color.White;
+
+
             //player healthbar1
             h1Text = Content.Load<Texture2D>("healthbar");
             h1Display = new Rectangle(75, 30, 200, 50);
@@ -141,6 +150,11 @@ namespace Module_8
             btnL2 = new cButton(Content.Load<Texture2D>("Level2"),
             _graphics.GraphicsDevice);
             btnL2.setPosition(new Vector2(350, 400));
+
+            //level3
+            btnL3 = new cButton(Content.Load<Texture2D>("Level3"),
+            _graphics.GraphicsDevice);
+            btnL3.setPosition(new Vector2(350, 400));
 
             //paused
             pausedText = Content.Load<Texture2D>("Menu");
@@ -179,6 +193,7 @@ namespace Module_8
         {
             stage1 = Content.Load<Texture2D>("background");
             stage2 = Content.Load<Texture2D>("stage2");
+            stage3 = Content.Load<Texture2D>("stage3");
             tiles = Content.Load<Texture2D>("Floor");
             _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
@@ -405,6 +420,151 @@ namespace Module_8
 
                         if (e5Display.Intersects(tpDis))
                         {
+                            MainGameState = GameState.Level3;
+                        }
+
+                        //solo attack
+                        if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                        {
+                            pText = Content.Load<Texture2D>("RightSlash");
+                            PlayAnimation2(0);
+                        }
+
+                        //pause
+                        if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                        {
+                            paused = true;
+
+                            btnContinue.isClicked = false;
+                        }
+
+                        //MOVEMENTS
+                        //right
+                        if (Keyboard.GetState().IsKeyDown(Keys.D) && pDisplay.X <= 810)
+                        {
+                            pText = Content.Load<Texture2D>("RightRun");
+                            pSource.Y = 1;
+                            pDisplay.X += 4;
+                            if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+                            {
+                                pDisplay.X += 5;
+                            }
+                            PlayAnimation(0);
+                        }
+
+                        //left
+                        if (Keyboard.GetState().IsKeyDown(Keys.A) && pDisplay.X >= -30)
+                        {
+                            pText = Content.Load<Texture2D>("LeftRun");
+                            pSource.Y = 1;
+                            pDisplay.X -= 4;
+                            if (Keyboard.GetState().IsKeyDown(Keys.LeftShift))
+                            {
+                                pDisplay.X -= 5;
+                            }
+                            PlayAnimation(0);
+                        }
+
+                        //jump
+                        if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                        {
+                            if (!Jump)
+                            {
+                                Jump = true;
+                            }
+                        }
+                        if (Jump)
+                        {
+                            pDisplay.Y -= SpeedY;
+                            SpeedY -= (Gravity / 5);
+                            Gravity += 1;
+
+                            if (Gravity >= 25)
+                            {
+                                SpeedY = 15;
+                                Gravity = 1;
+                                pDisplay.Y = 460;
+                                Jump = false;
+                            }
+                        }
+                    }
+                    else if (paused)
+                    {
+                        if (btnContinue.isClicked)
+                            paused = false;
+                        if (btnExit2.isClicked)
+                            MainGameState = GameState.MainMenu;
+
+                        btnContinue.Update(mouse);
+                        btnExit2.Update(mouse);
+                    }
+
+                    break;
+
+                case GameState.Level3:
+
+                    if (!paused)
+                    {
+                        //full health increase
+                        if (pDisplay.Intersects(hpDis))
+                        {
+                            h2Display.Width = 200;
+                        }
+
+                        //healthbar2 decrease
+                        if (pDisplay.Intersects(e3Display) || pDisplay.Intersects(e4Display) || pDisplay.Intersects(e5Display))
+                        {
+                            h2Display.Width -= 1;
+                            //knockback
+                            pText = Content.Load<Texture2D>("knockback");
+                            PlayAnimation2(0);
+                            if (h2Display.Width == 0)
+                            {
+                                gameover1 = true;
+                            }
+                        }
+
+                        //attack in enemy3
+                        if (pDisplay.Intersects(e3Display) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+                        {
+                            pText = Content.Load<Texture2D>("RightSlash");
+                            e3Color = new Color(red, green, blue);
+                            e3Display.Y -= 5;
+                            PlayAnimation2(0);
+                        }
+
+                        //attack in enemy4
+                        if (pDisplay.Intersects(e4Display) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+                        {
+                            pText = Content.Load<Texture2D>("RightSlash");
+                            e4Color = new Color(red, green, blue);
+                            e4Display.Y -= 5;
+                            PlayAnimation2(0);
+                        }
+
+                        //attack in enemy5
+                        if (pDisplay.Intersects(e5Display) && Mouse.GetState().LeftButton == ButtonState.Pressed)
+                        {
+                            pText = Content.Load<Texture2D>("RightSlash");
+                            e5Color = new Color(red, green, blue);
+                            e5Display.Y -= 5;
+                            PlayAnimation2(0);
+                        }
+
+                        if (e4Display.Intersects(tpDis))
+                        {
+                            e4Display.Y -= 800;
+                            tpDis = new Rectangle(350, 200, 80, 80);
+                        }
+
+                        if (e3Display.Intersects(tpDis))
+                        {
+                            e3Display.Y -= 800;
+                            tpDis = new Rectangle(50, 200, 80, 80);
+                        }
+
+                        if (e5Display.Intersects(tpDis))
+                        {
                             youwin1 = true;
                         }
 
@@ -473,7 +633,6 @@ namespace Module_8
                             }
                         }
                     }
-
                     else if (paused)
                     {
                         if (btnContinue.isClicked)
@@ -484,6 +643,7 @@ namespace Module_8
                         btnContinue.Update(mouse);
                         btnExit2.Update(mouse);
                     }
+
                     break;
             }
 
@@ -510,11 +670,7 @@ namespace Module_8
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
-
             switch (MainGameState)
-
-
-
             {
                 case GameState.MainMenu:
                     _spriteBatch.Draw(Content.Load<Texture2D>("MainBG"),
@@ -527,8 +683,6 @@ namespace Module_8
 
                 case GameState.Level1:
                     _spriteBatch.Draw(stage1, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
-                    //stage name
-                    _spriteBatch.DrawString(buttonFont, "Stage 1", new Vector2(10, 10), Color.Sienna);
                     _spriteBatch.Draw(pText, pDisplay, pSource, pColor);
                     //enemy1
                     _spriteBatch.Draw(eText, eDisplay, eSource, eColor);
@@ -563,8 +717,6 @@ namespace Module_8
 
                 case GameState.Level2:
                     _spriteBatch.Draw(stage2, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
-                    //stage name
-                    _spriteBatch.DrawString(buttonFont, "Stage 1", new Vector2(10, 10), Color.Sienna);
                     _spriteBatch.Draw(pText, pDisplay, pSource, pColor);
                     //enemy3
                     _spriteBatch.Draw(e3Text, e3Display, e3Source, e3Color);
@@ -587,13 +739,49 @@ namespace Module_8
                     }
                     if (gameover1)
                     {
-                        _spriteBatch.Draw(stage2, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
+                        _spriteBatch.Draw(stage1, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
                         _spriteBatch.Draw(gotext, new Rectangle(330, 50, 150, 150), Color.White);
                         btnExit3.Draw(_spriteBatch);
                     }
                     if (youwin1)
                     {
-                        _spriteBatch.Draw(stage2, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
+                        _spriteBatch.Draw(stage1, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
+                        _spriteBatch.Draw(winText, new Rectangle(330, 50, 150, 150), Color.White);
+                        btnExit4.Draw(_spriteBatch);
+                    }
+                    break;
+
+                case GameState.Level3:
+                    _spriteBatch.Draw(stage3, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
+                    _spriteBatch.Draw(pText, pDisplay, pSource, pColor);
+                    //enemy3
+                    _spriteBatch.Draw(e3Text, e3Display, e3Source, e3Color);
+                    //enemy4
+                    _spriteBatch.Draw(e4Text, e4Display, e4Source, e4Color);
+                    //enemy5
+                    _spriteBatch.Draw(e5Text, e5Display, e5Source, e5Color);
+                    //player health
+                    _spriteBatch.Draw(h2Text, h2Display, Color.White);
+                    _spriteBatch.Draw(hbText, hbDisplay, Color.White);
+                    //potion
+                    _spriteBatch.Draw(hpText, hpDis, Color.White);
+                    //teleporter
+                    _spriteBatch.Draw(tpText, tpDis, Color.White);
+                    if (paused)
+                    {
+                        _spriteBatch.Draw(pausedText, pausedDis, Color.White);
+                        btnContinue.Draw(_spriteBatch);
+                        btnExit2.Draw(_spriteBatch);
+                    }
+                    if (gameover1)
+                    {
+                        _spriteBatch.Draw(stage3, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
+                        _spriteBatch.Draw(gotext, new Rectangle(330, 50, 150, 150), Color.White);
+                        btnExit3.Draw(_spriteBatch);
+                    }
+                    if (youwin1)
+                    {
+                        _spriteBatch.Draw(stage3, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
                         _spriteBatch.Draw(winText, new Rectangle(330, 50, 150, 150), Color.White);
                         btnExit4.Draw(_spriteBatch);
                     }
@@ -606,10 +794,7 @@ namespace Module_8
 
         public void PlayAnimation(int reset)
         {
-
             if (delay > 15)
-
-
             {
                 if (reset != changeAnim)
                 {
