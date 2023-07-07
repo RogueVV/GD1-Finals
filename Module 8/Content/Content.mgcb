@@ -140,6 +140,12 @@
 /processorParam:TextureFormat=Color
 /build:healthborder.png
 
+#begin jumping.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:jumping.wav
+
 #begin knockback.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -452,6 +458,12 @@
 /processorParam:TextureFormat=Color
 /build:title.png
 
+#begin walk.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:walk.wav
+
 #begin waterbg.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -469,6 +481,12 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:waves.wav
+
+#begin whoosh.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:whoosh.wav
 
 #begin win.png
 /importer:TextureImporter

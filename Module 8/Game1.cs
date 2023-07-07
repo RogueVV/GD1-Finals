@@ -46,8 +46,17 @@ namespace Module_8
         bool youwin1 = false;
 
 
-        SoundEffect BGS;
-        SoundEffectInstance BGSi;
+        SoundEffect bgs;
+        SoundEffectInstance bgsi;
+
+        SoundEffect wks;
+        SoundEffectInstance wksi;
+
+        SoundEffect jps;
+        SoundEffectInstance jpsi;
+
+        SoundEffect ps;
+        SoundEffectInstance psi;
 
 
         enum GameState
@@ -194,18 +203,31 @@ namespace Module_8
             winDis = new Rectangle(100, 50, 150, 150);
 
 
-            BGS = Content.Load<SoundEffect>("waves");
-            BGSi = BGS.CreateInstance();
-            BGSi.IsLooped=true;
-            BGSi.Play();
-            BGSi.Volume = 0.01f;
+            bgs = Content.Load<SoundEffect>("waves");           //------------------------------------------------------bg 
+            bgsi = bgs.CreateInstance();
+            bgsi.IsLooped=true;
+            bgsi.Play();
+            bgsi.Volume = 0.01f;
+
+            wks = Content.Load<SoundEffect>("walk");
+            wksi = wks.CreateInstance();
+            wksi.IsLooped = true;
+            wksi.Volume = 0.8f;
+
+            jps = Content.Load<SoundEffect>("jumping");
+            jpsi = bgs.CreateInstance();
+            jpsi.Volume = 0.1f;
+
+            ps = Content.Load<SoundEffect>("whoosh");
+            psi = bgs.CreateInstance();
+            psi.Volume = 0.1f;
 
 
         }
 
         protected override void LoadContent()
         {
-            stage1 = Content.Load<Texture2D>("beachbg");           //------------------------------------------------------bg 
+            stage1 = Content.Load<Texture2D>("beachbg");
             stage2 = Content.Load<Texture2D>("waterbg");
             stage3 = Content.Load<Texture2D>("stage3");
             tiles = Content.Load<Texture2D>("Floor");
@@ -215,6 +237,11 @@ namespace Module_8
         protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
+            bool walk = false;//---------------------------------------------------------------
+            bool jump = false;
+            bool punch = false;
+
 
             //Random Color
             Random r = new Random();
@@ -265,6 +292,9 @@ namespace Module_8
                         //attack in enemy1
                         if (pDisplay.Intersects(eDisplay) && Mouse.GetState().LeftButton == ButtonState.Pressed)
                         {
+                            walk = false;
+                            jump = false;
+                            punch = true;//------------------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("RightSlash");
                             eColor = new Color(red, green, blue);
                             eDisplay.Y -= 5;
@@ -274,6 +304,9 @@ namespace Module_8
                         //attack in enemy2
                         if (pDisplay.Intersects(e2Display) && Mouse.GetState().LeftButton == ButtonState.Pressed)
                         {
+                            walk = false;
+                            jump = false;
+                            punch = true;//------------------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("RightSlash");
                             e2Color = new Color(red, green, blue);
                             e2Display.Y -= 5;
@@ -296,8 +329,12 @@ namespace Module_8
                         //solo attack
                         if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                         {
+                            walk = false;
+                            jump = false;
+                            punch = true;//------------------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("RightSlash");
                             PlayAnimation2(0);
+                            
                         }
 
                         //pause
@@ -312,6 +349,9 @@ namespace Module_8
                         //right
                         if (Keyboard.GetState().IsKeyDown(Keys.D) && pDisplay.X <= 810)
                         {
+                            walk = true;
+                            jump = false;
+                            //--------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("RightRun");
                             pSource.Y = 1;
                             pDisplay.X += 4;
@@ -320,11 +360,15 @@ namespace Module_8
                                 pDisplay.X += 5;
                             }
                             PlayAnimation(0);
+                             
                         }
 
                         //left
                         if (Keyboard.GetState().IsKeyDown(Keys.A) && pDisplay.X >= -30)
                         {
+                            walk = true;
+                            jump = false;
+                            //--------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("LeftRun");
                             pSource.Y = 1;
                             pDisplay.X -= 4;
@@ -338,6 +382,9 @@ namespace Module_8
                         //jump
                         if (Keyboard.GetState().IsKeyDown(Keys.Space))
                         {
+                            walk = false;
+                            jump = true;
+                             //-----------------------------------------------------------------------
                             if (!Jump)
                             {
                                 Jump = true;
@@ -396,6 +443,9 @@ namespace Module_8
                         //attack in enemy3
                         if (pDisplay.Intersects(e3Display) && Mouse.GetState().LeftButton == ButtonState.Pressed)
                         {
+                            walk = false;
+                            jump = false;
+                            punch = true;//------------------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("RightSlash");
                             e3Color = new Color(red, green, blue);
                             e3Display.Y -= 5;
@@ -405,6 +455,9 @@ namespace Module_8
                         //attack in enemy4
                         if (pDisplay.Intersects(e4Display) && Mouse.GetState().LeftButton == ButtonState.Pressed)
                         {
+                            walk = false;
+                            jump = false;
+                            punch = true;//------------------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("RightSlash");
                             e4Color = new Color(red, green, blue);
                             e4Display.Y -= 5;
@@ -414,6 +467,9 @@ namespace Module_8
                         //attack in enemy5
                         if (pDisplay.Intersects(e5Display) && Mouse.GetState().LeftButton == ButtonState.Pressed)
                         {
+                            walk = false;
+                            jump = false;
+                            punch = true;//------------------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("RightSlash");
                             e5Color = new Color(red, green, blue);
                             e5Display.Y -= 5;
@@ -441,6 +497,9 @@ namespace Module_8
                         //solo attack
                         if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                         {
+                            walk = false;
+                            jump = false;
+                            punch = true;//------------------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("RightSlash");
                             PlayAnimation2(0);
                         }
@@ -470,6 +529,9 @@ namespace Module_8
                         //left
                         if (Keyboard.GetState().IsKeyDown(Keys.A) && pDisplay.X >= -30)
                         {
+                            walk = true;
+                            jump = false;
+                            //--------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("LeftRun");
                             pSource.Y = 1;
                             pDisplay.X -= 4;
@@ -483,6 +545,9 @@ namespace Module_8
                         //jump
                         if (Keyboard.GetState().IsKeyDown(Keys.Space))
                         {
+                            walk = false;
+                            jump = true;
+                            //-----------------------------------------------------------------------
                             if (!Jump)
                             {
                                 Jump = true;
@@ -542,6 +607,9 @@ namespace Module_8
                         //attack in enemy3
                         if (pDisplay.Intersects(e3Display) && Mouse.GetState().LeftButton == ButtonState.Pressed)
                         {
+                            walk = false;
+                            jump = false;
+                            punch = true;//------------------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("RightSlash");
                             e3Color = new Color(red, green, blue);
                             e3Display.Y -= 5;
@@ -551,6 +619,9 @@ namespace Module_8
                         //attack in enemy4
                         if (pDisplay.Intersects(e4Display) && Mouse.GetState().LeftButton == ButtonState.Pressed)
                         {
+                            walk = false;
+                            jump = false;
+                            punch = true;//------------------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("RightSlash");
                             e4Color = new Color(red, green, blue);
                             e4Display.Y -= 5;
@@ -560,6 +631,9 @@ namespace Module_8
                         //attack in enemy5
                         if (pDisplay.Intersects(e5Display) && Mouse.GetState().LeftButton == ButtonState.Pressed)
                         {
+                            walk = false;
+                            jump = false;
+                            punch = true;//------------------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("RightSlash");
                             e5Color = new Color(red, green, blue);
                             e5Display.Y -= 5;
@@ -615,6 +689,9 @@ namespace Module_8
                         //left
                         if (Keyboard.GetState().IsKeyDown(Keys.A) && pDisplay.X >= -30)
                         {
+                            walk = true;
+                            jump = false;
+                            //--------------------------------------------------------------------
                             pText = Content.Load<Texture2D>("LeftRun");
                             pSource.Y = 1;
                             pDisplay.X -= 4;
@@ -628,6 +705,9 @@ namespace Module_8
                         //jump
                         if (Keyboard.GetState().IsKeyDown(Keys.Space))
                         {
+                            walk = false;
+                            jump = true;
+                            //-----------------------------------------------------------------------
                             if (!Jump)
                             {
                                 Jump = true;
@@ -661,6 +741,24 @@ namespace Module_8
 
                     break;
             }
+
+            if (walk)//-----------------------------------------------------------------------
+            {
+                wksi.Play();
+            }
+            else { wksi.Stop(); }
+
+            if (jump)
+            {
+                jpsi.Play();
+            }
+            else { jpsi.Stop(); }
+
+            if (punch)
+            {
+                psi.Play();
+            }
+            else { psi.Stop(); }
 
             if (gameover1)
             {
