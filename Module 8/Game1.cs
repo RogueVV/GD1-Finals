@@ -45,6 +45,11 @@ namespace Module_8
         bool gameover1 = false;
         bool youwin1 = false;
 
+
+        SoundEffect BGS;
+        SoundEffectInstance BGSi;
+
+
         enum GameState
         {
             MainMenu, Choose,
@@ -133,8 +138,8 @@ namespace Module_8
             //==Main Menu==
             _graphics.PreferredBackBufferWidth = screenWidth;
             _graphics.PreferredBackBufferHeight = screenHeight;
-            MainMtext = Content.Load<Texture2D>("menutext");
-            MainMDis = new Rectangle(100, 50, MainMtext.Width, MainMtext.Height);
+            MainMtext = Content.Load<Texture2D>("title");
+            MainMDis = new Rectangle(220, 70, 390, 250);
 
             //play
             btnPlay = new cButton(Content.Load<Texture2D>("Start"),
@@ -181,18 +186,27 @@ namespace Module_8
 
             base.Initialize();
             //Game Over
-            gotext = Content.Load<Texture2D>("gameover");
+            gotext = Content.Load<Texture2D>("lose");
             goDis = new Rectangle(100, 50, 150, 150);
 
             //You Win
-            winText = Content.Load<Texture2D>("youwin");
+            winText = Content.Load<Texture2D>("win");
             winDis = new Rectangle(100, 50, 150, 150);
+
+
+            BGS = Content.Load<SoundEffect>("waves");
+            BGSi = BGS.CreateInstance();
+            BGSi.IsLooped=true;
+            BGSi.Play();
+            BGSi.Volume = 0.01f;
+
+
         }
 
         protected override void LoadContent()
         {
-            stage1 = Content.Load<Texture2D>("background");
-            stage2 = Content.Load<Texture2D>("stage2");
+            stage1 = Content.Load<Texture2D>("beachbg");           //------------------------------------------------------bg 
+            stage2 = Content.Load<Texture2D>("waterbg");
             stage3 = Content.Load<Texture2D>("stage3");
             tiles = Content.Load<Texture2D>("Floor");
             _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -418,6 +432,7 @@ namespace Module_8
                             tpDis = new Rectangle(50, 200, 80, 80);
                         }
 
+                        //win
                         if (e5Display.Intersects(tpDis))
                         {
                             MainGameState = GameState.Level3;
@@ -673,7 +688,7 @@ namespace Module_8
             switch (MainGameState)
             {
                 case GameState.MainMenu:
-                    _spriteBatch.Draw(Content.Load<Texture2D>("MainBG"),
+                    _spriteBatch.Draw(Content.Load<Texture2D>("background"),
                         new Rectangle(0, 0, screenWidth, screenHeight),
                         Color.White);
                     _spriteBatch.Draw(MainMtext, MainMDis, Color.White);
@@ -704,13 +719,13 @@ namespace Module_8
                     if (gameover1)
                     {
                         _spriteBatch.Draw(stage1, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
-                        _spriteBatch.Draw(gotext, new Rectangle(330, 50, 150, 150), Color.White);
+                        _spriteBatch.Draw(gotext, new Rectangle(220, 70, 390, 250), Color.White);
                         btnExit3.Draw(_spriteBatch);
                     }
                     if (youwin1)
                     {
                         _spriteBatch.Draw(stage1, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
-                        _spriteBatch.Draw(winText, new Rectangle(330, 50, 150, 150), Color.White);
+                        _spriteBatch.Draw(winText, new Rectangle(220, 100, 500, 300), Color.White);
                         btnExit4.Draw(_spriteBatch);
                     }
                     break;
@@ -740,13 +755,13 @@ namespace Module_8
                     if (gameover1)
                     {
                         _spriteBatch.Draw(stage1, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
-                        _spriteBatch.Draw(gotext, new Rectangle(330, 50, 150, 150), Color.White);
+                        _spriteBatch.Draw(gotext, new Rectangle(220, 70, 390, 250), Color.White);
                         btnExit3.Draw(_spriteBatch);
                     }
                     if (youwin1)
                     {
                         _spriteBatch.Draw(stage1, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
-                        _spriteBatch.Draw(winText, new Rectangle(330, 50, 150, 150), Color.White);
+                        _spriteBatch.Draw(winText, new Rectangle(220, 100, 500, 300), Color.White);
                         btnExit4.Draw(_spriteBatch);
                     }
                     break;
@@ -782,7 +797,7 @@ namespace Module_8
                     if (youwin1)
                     {
                         _spriteBatch.Draw(stage3, new Rectangle(0, 0, screenWidth, screenHeight), Color.White);
-                        _spriteBatch.Draw(winText, new Rectangle(330, 50, 150, 150), Color.White);
+                        _spriteBatch.Draw(winText, new Rectangle(218, 100, 350, 220), Color.White);
                         btnExit4.Draw(_spriteBatch);
                     }
                     break;
